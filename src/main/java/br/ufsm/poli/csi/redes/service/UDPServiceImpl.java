@@ -75,9 +75,9 @@ public class UDPServiceImpl implements UDPService {
                     Mensagem msg = mapper.readValue(dados, Mensagem.class);
 
 
-//                    if (usuario != null && msg.getUsuario().equals(usuario.getNome())) {
-//                        continue;
-//                    }
+                    if (usuario != null && msg.getUsuario().equals(usuario.getNome())) {
+                        continue;
+                    }
 
                     switch (msg.getTipoMensagem()) {
                         case sonda -> {
