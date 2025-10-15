@@ -72,6 +72,14 @@ public class ChatClientSwing extends JFrame {
 
 
 
+                            // envia mensagem de fim de chat para o outro usuário
+                            if (!painel.chatGeral) { // não envia para chat geral
+                                udpService.encerrarChat(painel.getUsuario());       // envia UDP
+                                painel.getUsuario(); // opcional, se quiser atualizar algo local
+                            }
+
+
+
                             tabbedPane.remove(tab);
                             chatsAbertos.remove(painel.getUsuario().getNome());
                         });

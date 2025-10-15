@@ -109,6 +109,7 @@ public class UDPServiceImpl implements UDPService {
                         case fim_chat -> {
                             Usuario remetente = usuariosConectados.get(msg.getUsuario());
                             if (remetente != null) {
+                                // Apenas notifica localmente que o outro usuário fechou o chat
                                 recebendoFimChat(remetente);
                             }
                         }

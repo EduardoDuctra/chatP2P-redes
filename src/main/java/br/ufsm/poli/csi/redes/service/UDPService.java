@@ -30,6 +30,6 @@ public interface UDPService {
      */
     void addListenerUsuario(UDPServiceUsuarioListener listener);
 
-
+    void encerrarChat(Usuario destinatario);
 
 }
