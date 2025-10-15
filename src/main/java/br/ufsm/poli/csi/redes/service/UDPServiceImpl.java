@@ -5,6 +5,7 @@ import br.ufsm.poli.csi.redes.model.Usuario;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.SneakyThrows;
 
+import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
@@ -26,6 +27,21 @@ public class UDPServiceImpl implements UDPService {
 
     }
 
+
+    private void enviarPacote(byte[] bMensagem, String ipDestino) throws Exception {
+        DatagramPacket pacote = new DatagramPacket(
+                bMensagem,
+                bMensagem.length,
+                InetAddress.getByName(ipDestino),
+                8080
+        );
+        DatagramSocket socket = new DatagramSocket();
+        socket.send(pacote);
+        socket.close();
+    }
+
+
+
     private class EnviaSonda implements Runnable {
         private final ObjectMapper mapper = new ObjectMapper();
 
@@ -46,16 +62,8 @@ public class UDPServiceImpl implements UDPService {
 
                 for (int i = 1; i < 255; i++) {
                     try {
-                        DatagramPacket pacote = new DatagramPacket(
-                                bMensagem,
-                                bMensagem.length,
-                                InetAddress.getByName(ipRede + i),
-                                8080
-                        );
-                        DatagramSocket socket = new DatagramSocket();
-                        socket.send(pacote);
-                        socket.close();
-                    } catch (Exception ignored) {
+                        enviarPacote(bMensagem, ipRede + i);
+                    } catch (IOException e) {
 
                     }
                 }
@@ -166,17 +174,10 @@ public class UDPServiceImpl implements UDPService {
             if (chatGeral) {
                 for (int i = 1; i < 255; i++) {
                     try {
+                        enviarPacote(bMensagem, ipRede + i);
+                    } catch (IOException e) {
 
-                        pacote = new DatagramPacket(
-                                bMensagem,
-                                bMensagem.length,
-                                InetAddress.getByName(ipRede + i),
-                                8080
-                        );
-                        DatagramSocket socket = new DatagramSocket();
-                        socket.send(pacote);
-                        socket.close();
-                    } catch (Exception ignored) {}
+                    }
                 }
             } else {
                 Usuario u = usuariosConectados.get(destinatario.getNome());
@@ -294,6 +295,8 @@ public class UDPServiceImpl implements UDPService {
             e.printStackTrace();
         }
     }
+
+
 
 
 }
