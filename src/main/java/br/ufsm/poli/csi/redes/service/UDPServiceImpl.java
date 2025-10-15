@@ -20,6 +20,8 @@ public class UDPServiceImpl implements UDPService {
     private final CopyOnWriteArrayList<UDPServiceMensagemListener> mensagemListeners = new CopyOnWriteArrayList<>();
     private Map<String, Long> ultimoContato = new HashMap<>();
 
+    private String ipRede = "192.168.100.";
+
     public UDPServiceImpl() {
 
     }
@@ -47,7 +49,7 @@ public class UDPServiceImpl implements UDPService {
                         DatagramPacket pacote = new DatagramPacket(
                                 bMensagem,
                                 bMensagem.length,
-                                InetAddress.getByName("192.168.100." + i), // ajuste a faixa de IP conforme necessário
+                                InetAddress.getByName(ipRede + i),
                                 8080
                         );
                         DatagramSocket socket = new DatagramSocket();
@@ -161,31 +163,21 @@ public class UDPServiceImpl implements UDPService {
             DatagramPacket pacote;
 
             if (chatGeral) {
-                try {
-                    // Cria um socket UDP para enviar pacotes
-                    DatagramSocket socket = new DatagramSocket();
-                    socket.setBroadcast(true);  // Habilita o modo broadcast
+                for (int i = 1; i < 255; i++) {
+                    try {
 
-                    // Define o endereço de broadcast da rede
-                    InetAddress broadcastAddress = InetAddress.getByName("192.168.100.255");
-
-                    // Monta o pacote UDP com a mensagem a ser enviada
-                    DatagramPacket pacoteBroadcast = new DatagramPacket(
-                            bMensagem,           // bytes da mensagem
-                            bMensagem.length,    // tamanho da mensagem
-                            broadcastAddress,    // endereço de destino (broadcast)
-                            8080                 // porta de destino
-                    );
-
-                    // Envia o pacote
-                    socket.send(pacoteBroadcast);
-
-                    // Fecha o socket
-                    socket.close();
-                } catch (Exception ignored) {
+                        pacote = new DatagramPacket(
+                                bMensagem,
+                                bMensagem.length,
+                                InetAddress.getByName(ipRede + i),
+                                8080
+                        );
+                        DatagramSocket socket = new DatagramSocket();
+                        socket.send(pacote);
+                        socket.close();
+                    } catch (Exception ignored) {}
                 }
-
-        } else {
+            } else {
                 Usuario u = usuariosConectados.get(destinatario.getNome());
                 if (u != null && u.getEndereco() != null) {
                     DatagramSocket socket = new DatagramSocket();
