@@ -72,10 +72,10 @@ public class ChatClientSwing extends JFrame {
 
 
 
-                            // envia mensagem de fim de chat para o outro usuário
-                            if (!painel.chatGeral) { // não envia para chat geral
-                                udpService.encerrarChat(painel.getUsuario());       // envia UDP
-                                painel.getUsuario(); // opcional, se quiser atualizar algo local
+                            // chamo a função para encerrar o chat
+                            if (!painel.chatGeral) {
+                                udpService.encerrarChat(painel.getUsuario());
+                                painel.getUsuario();
                             }
 
 
@@ -101,7 +101,7 @@ public class ChatClientSwing extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setTitle("Chat P2P - Redes de Computadores");
 
-        // === NOVA PARTE: entrada de nome e status ===
+
         String nomeUsuario = JOptionPane.showInputDialog(this, "Digite seu nome de usuário:");
         if (nomeUsuario == null || nomeUsuario.trim().isEmpty()) {
             JOptionPane.showMessageDialog(this, "Nome de usuário não pode ser vazio!");
@@ -129,7 +129,7 @@ public class ChatClientSwing extends JFrame {
         Usuario.StatusUsuario statusSelecionado = (Usuario.StatusUsuario) comboStatus.getSelectedItem();
         this.meuUsuario = new Usuario(nomeUsuario, statusSelecionado, InetAddress.getLocalHost());
 
-        // Atualiza o título com nome e status
+
         setTitle("Chat P2P - " + nomeUsuario + " (" + statusSelecionado.name() + ")");
 
         // Inicia serviços
